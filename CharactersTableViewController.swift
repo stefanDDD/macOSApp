@@ -10,6 +10,7 @@ import UIKit
 
 class CharactersTableViewController: UITableViewController{
     var charactersData: [Character]!
+    var characterData: Character!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +23,6 @@ class CharactersTableViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(self.charactersData.count)
         return self.charactersData.count
     }
     
@@ -30,23 +30,21 @@ class CharactersTableViewController: UITableViewController{
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let characterData = self.charactersData[indexPath.row]
         
-        let imagePath = characterData.image
-        
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: imagePath) {
-            if let image = UIImage(contentsOfFile: imagePath) {
-                cell.imageView?.image = image
-            } else {
-                cell.imageView?.image = UIImage(named: "defaultImage")
-            }
-        } else {
-            cell.imageView?.image = UIImage(named: "defaultImage")
-        }
-        
+        cell.imageView?.image = UIImage(named: characterData.image)
         cell.textLabel?.text = characterData.name
         return cell
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueBasicInformation" {
+            if let destController = segue.destination as? BasicInformationViewController {
+                if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                    characterData = charactersData[indexPath.row]
+                    destController.characterData = self.characterData
+                }
+            }
+        }
+    }
 
 }
 
