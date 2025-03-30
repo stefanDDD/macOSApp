@@ -64,6 +64,15 @@
         <url>https://breakingbad.fandom.com/wiki/Jane_Margolis</url>
     </character>
     <character>
+        <name>James Morgan "Jimmy" McGill</name>
+        <alias>Saul Goodman, Slippin' Jimmy</alias>
+        <role>Criminal lawyer, owner of Saul Goodman and Associates</role>
+        <actor>Bob Odenkirk</actor>
+        <quote>It's all good, man!</quote>
+        <image>Assets/saul_goodman.jpeg</image>
+        <url>https://breakingbad.fandom.com/wiki/Jimmy_McGill</url>
+    </character>
+    <character>
         <name>Gustavo "Gus" Fring</name>
         <alias>The Chicken Man</alias>
         <role>Owner of Los Pollos Hermanos, high-ranking drug kingpin.</role>
@@ -71,15 +80,6 @@
         <quote>What does a man do, Walter? A man provides for his family.</quote>
         <image>Assets/gustavo_fring.jpeg</image>
         <url>https://breakingbad.fandom.com/wiki/Gustavo_Fring</url>
-    </character>
-    <character>
-        <name>James Morgan "jimmy" McGill</name>
-        <alias>Saul Goodman, Slippin' Jimmy</alias>
-        <role>Criminal lawyer, ownert of Saul Goodman & Associates</role>
-        <actor>Bob Odenkirk</actor>
-        <quote>It's all good, man!</quote>
-        <image>Assets/saul_goodman.jpeg</image>
-        <url>https://breakingbad.fandom.com/wiki/Jimmy_McGill</url>
     </character>
     <character>
         <name>Skyler White</name>
