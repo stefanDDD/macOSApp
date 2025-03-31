@@ -14,9 +14,17 @@ class CharactersTableViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        charactersData = Characters(name:"characters_list.xml").charactersData
         
+        charactersData = Characters(name: "characters_list.xml").charactersData
+        
+        let backgroundImage = UIImage(named: "bb_background.jpeg")
+        let imageViewbg = UIImageView(image: backgroundImage)
+        imageViewbg.frame = self.view.bounds
+        imageViewbg.contentMode = .scaleAspectFill
+
+        tableView.backgroundView = imageViewbg
     }
+
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -30,8 +38,20 @@ class CharactersTableViewController: UITableViewController{
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let characterData = self.charactersData[indexPath.row]
         
-        cell.imageView?.image = UIImage(named: characterData.image)
+        if let image = UIImage(named: characterData.image) {
+            cell.imageView?.image = image
+        }
+        
+        DispatchQueue.main.async {
+            if let imageView = cell.imageView {
+                imageView.layer.cornerRadius = imageView.frame.size.width / 2
+                imageView.clipsToBounds = true
+            }
+        }
+        
         cell.textLabel?.text = characterData.name
+        cell.textLabel?.textColor = .white
+        cell.backgroundColor = .clear
         return cell
     }
     

@@ -26,10 +26,19 @@ class AllInfoViewController: UIViewController{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        let backgroundImage = UIImage(named: "bb_background.jpeg")
+        let imageViewbg = UIImageView(image: backgroundImage)
+        imageViewbg.frame = self.view.bounds
+        imageViewbg.contentMode = .scaleAspectFill
+        self.view.addSubview(imageViewbg)
+        self.view.sendSubviewToBack(imageViewbg)
         nameLabel.text = characterData?.name
         aliasLabel.text = characterData?.alias
         actorLabel.text = characterData?.actor
         if let imageName = characterData?.image {
+            imageView.layer.cornerRadius = imageView.frame.width / 2
+            imageView.layer.masksToBounds = true
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: imageName)
         }
         roleLabel.text = characterData?.role

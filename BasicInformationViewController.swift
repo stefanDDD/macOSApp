@@ -23,8 +23,16 @@ class BasicInformationViewController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let backgroundImage = UIImage(named: "bb_background.jpeg")
+        let imageViewbg = UIImageView(image: backgroundImage)
+        imageViewbg.frame = self.view.bounds
+        imageViewbg.contentMode = .scaleAspectFill
+        self.view.addSubview(imageViewbg)
+        self.view.sendSubviewToBack(imageViewbg)
         nameLabel.text = characterData?.name
+        imageView.layer.cornerRadius = imageView.frame.width / 2
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(named: characterData!.image)
 
     }
