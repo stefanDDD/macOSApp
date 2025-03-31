@@ -65,6 +65,7 @@ class CharactersTableViewController: UITableViewController{
             }
         }
     }
+    
 
 }
 
