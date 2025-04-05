@@ -25,6 +25,21 @@ class UrlViewController: UIViewController {
             let request = URLRequest(url: url)
             urlWebView.load(request)
         }
+        styleBreakingBadWebView(webView: self.urlWebView)
     }
+    
+    func styleBreakingBadWebView(webView: WKWebView) {
+        webView.layer.cornerRadius = 15
+        webView.clipsToBounds = true
+        webView.layer.borderWidth = 3
+        webView.layer.borderColor = UIColor.green.cgColor
+        webView.layer.shadowColor = UIColor.black.cgColor
+        webView.layer.shadowOffset = CGSize(width: 0, height: 4)
+        webView.layer.shadowOpacity = 0.7
+        webView.layer.shadowRadius = 6
+        webView.backgroundColor = UIColor(red: 20/255, green: 40/255, blue: 20/255, alpha: 1)
+        webView.isOpaque = false
+    }
+
 }
 

@@ -1,17 +1,8 @@
-//
-//  BasicInformationViewController.swift
-//  BreakingBad
-//
-//  Created by stefan on 30.03.2025.
-//
-
 import UIKit
-import Photos
 import PhotosUI
 
 class UploadViewController: UIViewController, PHPickerViewControllerDelegate {
 
-    
     @IBOutlet weak var nameLabel: UITextField!
     @IBOutlet weak var aliasLabel: UITextField!
     @IBOutlet weak var roleLabel: UITextField!
@@ -21,6 +12,7 @@ class UploadViewController: UIViewController, PHPickerViewControllerDelegate {
     @IBOutlet weak var imageName: UILabel!
 
     var selectedImage: UIImage?
+    var savedImagePath: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,101 +24,90 @@ class UploadViewController: UIViewController, PHPickerViewControllerDelegate {
         self.view.addSubview(imageViewbg)
         self.view.sendSubviewToBack(imageViewbg)
     }
-    
+
     @IBAction func uploadButton(_ sender: UIButton) {
         var config = PHPickerConfiguration()
         config.selectionLimit = 1
         config.filter = .images
-
+        
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
         present(picker, animated: true)
     }
-    
+
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
         guard let provider = results.first?.itemProvider, provider.canLoadObject(ofClass: UIImage.self) else {
-            print("❌ Imposibil de încărcat imaginea")
             return
         }
 
         provider.loadObject(ofClass: UIImage.self) { (image, error) in
             DispatchQueue.main.async {
-                guard let selectedImage = image as? UIImage else {
-                    print("❌ Eroare la conversia imaginii")
-                    return
-                }
+                guard let selectedImage = image as? UIImage else { return }
                 
-                if let savedPath = self.saveImageToDocuments(image: selectedImage) {
+                if let savedPath = self.saveImageToAssets(image: selectedImage) {
                     self.imageName.text = savedPath.lastPathComponent
                     self.selectedImage = selectedImage
-                } else {
-                    print("❌ Eroare la salvarea imaginii")
+                    self.savedImagePath = savedPath.path
                 }
             }
         }
     }
 
-
-    func saveImageToDocuments(image: UIImage) -> URL? {
+    func saveImageToAssets(image: UIImage) -> URL? {
         let fileManager = FileManager.default
-        let docDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let imagePath = docDir.appendingPathComponent("selected_image.jpg")
-
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        
+        let assetsFolder = documentsDirectory.appendingPathComponent("Assets")
+        try? fileManager.createDirectory(at: assetsFolder, withIntermediateDirectories: true)
+        
+        let imageName = "image_\(UUID().uuidString).jpg"
+        let imagePath = assetsFolder.appendingPathComponent(imageName)
+        
         if let imageData = image.jpegData(compressionQuality: 0.8) {
-            do {
-                try imageData.write(to: imagePath)
-                print("✔️ Imagine salvată la: \(imagePath)")
-                return imagePath
-            } catch {
-                print("❌ Eroare la salvarea imaginii: \(error)")
-            }
+            try? imageData.write(to: imagePath)
+            return imagePath
         }
         return nil
     }
 
-
-
     @IBAction func confirmButton(_ sender: UIButton) {
-        guard let image = selectedImage else { return }
-        
-        PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: image)
-        }
-        
         appendToXML()
     }
 
     @IBAction func cancelButton(_ sender: UIButton) {
         imageName.text = ""
         selectedImage = nil
+        savedImagePath = nil
     }
-    
+
     func appendToXML() {
         guard let name = nameLabel.text, !name.isEmpty,
               let alias = aliasLabel.text, !alias.isEmpty,
               let role = roleLabel.text, !role.isEmpty,
               let actor = actorLabel.text, !actor.isEmpty,
               let quote = quoteLabel.text, !quote.isEmpty,
-              let url = urlLabel.text, !url.isEmpty,
-              let image = imageName.text, !image.isEmpty else { return }
+              let url = urlLabel.text, !url.isEmpty else {
+            return
+        }
 
-        let xmlFileName = "characters_list.xml"
-        let fileManager = FileManager.default
-        let docDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let xmlFilePath = docDir.appendingPathComponent(xmlFileName)
+        guard let filePath = Bundle.main.path(forResource: "characters_file", ofType: "xml") else {
+            return
+        }
 
         var xmlString = ""
 
-        if fileManager.fileExists(atPath: xmlFilePath.path) {
-            if let existingXML = try? String(contentsOf: xmlFilePath) {
-                xmlString = existingXML.replacingOccurrences(of: "</characters>", with: "")
-            }
-        } else {
-            xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<characters>\n"
+        do {
+            xmlString = try String(contentsOfFile: filePath, encoding: .utf8)
+        } catch {
+            return
         }
 
+        let finalImagePath = savedImagePath ?? "DEFAULT_NAME"
+        
         let newCharacter = """
         <character>
             <name>\(name)</name>
@@ -134,13 +115,22 @@ class UploadViewController: UIViewController, PHPickerViewControllerDelegate {
             <role>\(role)</role>
             <actor>\(actor)</actor>
             <quote>\(quote)</quote>
-            <image>\(image)</image>
+            <image>\(finalImagePath)</image>
             <url>\(url)</url>
-        </character>\n</characters>
+        </character>\n
         """
+        
+        xmlString.append(newCharacter)
 
-        xmlString += newCharacter
+        if !xmlString.hasSuffix("</characters>") {
+            xmlString.append("</characters>")
+        }
 
-        try? xmlString.write(to: xmlFilePath, atomically: true, encoding: .utf8)
+        do {
+            try xmlString.write(toFile: filePath, atomically: true, encoding: .utf8)
+            print("XML actualizat cu succes.")
+        } catch {
+            return
+        }
     }
 }

@@ -23,6 +23,7 @@ class CharactersTableViewController: UITableViewController{
         imageViewbg.contentMode = .scaleAspectFill
 
         tableView.backgroundView = imageViewbg
+        styleBreakingBadTableView()
     }
 
     
@@ -46,12 +47,17 @@ class CharactersTableViewController: UITableViewController{
             if let imageView = cell.imageView {
                 imageView.layer.cornerRadius = imageView.frame.size.width / 2
                 imageView.clipsToBounds = true
+                
+                imageView.layer.borderWidth = 1
+                imageView.layer.borderColor = UIColor.green.cgColor
             }
         }
-        
+
         cell.textLabel?.text = characterData.name
         cell.textLabel?.textColor = .white
-        cell.backgroundColor = .clear
+        cell.backgroundColor = UIColor(white: 0.3, alpha: 0.6)
+        cell.contentView.layer.cornerRadius = 12
+        cell.contentView.layer.masksToBounds = true
         return cell
     }
     
@@ -66,6 +72,18 @@ class CharactersTableViewController: UITableViewController{
         }
     }
     
-
+    func styleBreakingBadTableView() {
+        tableView.layer.cornerRadius = 10
+        tableView.clipsToBounds = true
+        tableView.backgroundColor = UIColor.clear
+        let tableViewHeight: CGFloat = 300
+        tableView.frame = CGRect(x: 20, y: 100, width: self.view.frame.size.width - 40, height: tableViewHeight)
+        
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIColor(white: 0.8, alpha: 1)
+        
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+    }
+    
 }
 
