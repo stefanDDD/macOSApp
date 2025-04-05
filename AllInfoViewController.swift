@@ -8,10 +8,12 @@
 import Foundation
 import UIKit
 
-class AllInfoViewController: UIViewController{
-    
+import UIKit
+
+class AllInfoViewController: UIViewController {
+
     var characterData: Character?
-    
+
     // MARK: - outlets
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var aliasLabel: UILabel!
@@ -28,18 +30,22 @@ class AllInfoViewController: UIViewController{
     @IBOutlet weak var roleLabelDescr: UILabel!
     @IBOutlet weak var quoteLabelDescr: UILabel!
     @IBOutlet weak var urlLabelDescr: UILabel!
-    
+
     // MARK: - actions
     @IBAction func urlViewButton(_ sender: UIButton) {
+        // Add your URL view action logic here
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
         let backgroundImage = UIImage(named: "bb_background.jpeg")
         let imageViewbg = UIImageView(image: backgroundImage)
         imageViewbg.frame = self.view.bounds
         imageViewbg.contentMode = .scaleAspectFill
         self.view.addSubview(imageViewbg)
         self.view.sendSubviewToBack(imageViewbg)
+
         styleBreakingBadButton(button: self.urlViewButtonStyle)
         styleImageView(imgView: self.imageView)
         styleDescrLabel(label: nameLabelDescr)
@@ -57,7 +63,7 @@ class AllInfoViewController: UIViewController{
         styleNameLabel(label: self.urlLabel, data: characterData!.url)
         styleUIViewLayout(uiView: self.uiViewLayout)
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "sequeDisplayURL" {
             if let destController = segue.destination as? UrlViewController {
@@ -65,7 +71,7 @@ class AllInfoViewController: UIViewController{
             }
         }
     }
-    
+
     func styleBreakingBadButton(button: UIButton) {
         button.backgroundColor = UIColor(red: 30/255, green: 50/255, blue: 30/255, alpha: 1)
         button.setTitleColor(.white, for: .normal)
@@ -80,23 +86,28 @@ class AllInfoViewController: UIViewController{
         button.layer.shadowRadius = 4
         button.bounds.size = CGSize(width: 160, height: 60)
     }
-    
+
     func styleImageView(imgView: UIImageView) {
         imgView.layer.cornerRadius = imgView.frame.width / 2
         imgView.layer.masksToBounds = true
         imgView.contentMode = .scaleAspectFill
-        imgView.image = UIImage(named: characterData!.image)
+
+        if let image = UIImage(named: characterData!.image) {
+            imgView.image = image
+        } else {
+            imgView.image = loadImage(named: characterData!.image)
+        }
 
         imgView.layer.borderWidth = 3
         imgView.layer.borderColor = UIColor.green.cgColor
-        
+
         imgView.layer.shadowColor = UIColor.black.cgColor
         imgView.layer.shadowOffset = CGSize(width: 0, height: 4)
         imgView.layer.shadowOpacity = 0.7
         imgView.layer.shadowRadius = 6
         imgView.alpha = 0.9
     }
-    
+
     func styleNameLabel(label: UILabel, data: String) {
         label.text = data
         label.font = UIFont(name: "Avenir-Heavy", size: 16)
@@ -111,7 +122,7 @@ class AllInfoViewController: UIViewController{
         label.layer.cornerRadius = 10
         label.layer.masksToBounds = true
         label.backgroundColor = UIColor(white: 0.2, alpha: 0.5)
-        
+
         label.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
     }
 
@@ -143,5 +154,17 @@ class AllInfoViewController: UIViewController{
         label.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
     }
 
+    func loadImage(named imageName: String) -> UIImage? {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
 
+        let imageURL = documentsDirectory.appendingPathComponent(imageName)
+        if let image = UIImage(contentsOfFile: imageURL.path) {
+            return image
+        }
+
+        return nil
+    }
 }

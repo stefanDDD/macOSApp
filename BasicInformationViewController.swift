@@ -8,30 +8,35 @@
 import Foundation
 import UIKit
 
-class BasicInformationViewController: UIViewController{
+class BasicInformationViewController: UIViewController {
     
     var characterData: Character?
-    
+
     // MARK: - outlets
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var moreInfoButtonStyle: UIButton!
+
     // MARK: - actions
     @IBAction func moreInfoButton(_ sender: UIButton) {
-
+        // Your action logic here
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let backgroundImage = UIImage(named: "bb_background.jpeg")
         let imageViewbg = UIImageView(image: backgroundImage)
         imageViewbg.frame = self.view.bounds
         imageViewbg.contentMode = .scaleAspectFill
         self.view.addSubview(imageViewbg)
         self.view.sendSubviewToBack(imageViewbg)
-        styleNameLabel(label: self.nameLabel, data: characterData!.name)
-        styleImageView(imgView: self.imageView)
-        styleBreakingBadButton(button: self.moreInfoButtonStyle)
+        
+        if let character = characterData {
+            styleNameLabel(label: self.nameLabel, data: character.name)
+            styleImageView(imgView: self.imageView)
+            styleBreakingBadButton(button: self.moreInfoButtonStyle)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -41,6 +46,7 @@ class BasicInformationViewController: UIViewController{
             }
         }
     }
+
     func styleBreakingBadButton(button: UIButton) {
         button.backgroundColor = UIColor(red: 30/255, green: 50/255, blue: 30/255, alpha: 1)
         button.setTitleColor(.white, for: .normal)
@@ -55,13 +61,18 @@ class BasicInformationViewController: UIViewController{
         button.layer.shadowRadius = 4
         button.bounds.size = CGSize(width: 160, height: 60)
     }
-    
+
     func styleImageView(imgView: UIImageView) {
         imgView.layer.cornerRadius = imgView.frame.width / 2
         imgView.layer.masksToBounds = true
         imgView.contentMode = .scaleAspectFill
-        imgView.image = UIImage(named: characterData!.image)
-
+        
+        if let image = UIImage(named: characterData!.image) {
+            imgView.image = image
+        } else {
+            imgView.image = loadImage(named: characterData!.image)
+        }
+        
         imgView.layer.borderWidth = 3
         imgView.layer.borderColor = UIColor.green.cgColor
         
@@ -86,4 +97,17 @@ class BasicInformationViewController: UIViewController{
         label.backgroundColor = UIColor(white: 0.4, alpha: 0.7)
     }
 
+    func loadImage(named imageName: String) -> UIImage? {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        
+        let imageURL = documentsDirectory.appendingPathComponent(imageName)
+        if let image = UIImage(contentsOfFile: imageURL.path) {
+            return image
+        }
+        
+        return nil
+    }
 }

@@ -66,6 +66,7 @@ class CharactersTableViewController: UITableViewController {
             if let destController = segue.destination as? BasicInformationViewController {
                 if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
                     characterData = charactersData[indexPath.row]
+                    print(characterData.image)
                     destController.characterData = self.characterData
                 }
             }
