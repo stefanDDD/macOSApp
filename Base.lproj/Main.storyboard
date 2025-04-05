@@ -114,20 +114,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5K-0C-Yr6">
-                                <rect key="frame" x="20" y="807" width="138" height="55"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Cancel">
-                                    <fontDescription key="titleFontDescription" type="system" pointSize="24"/>
-                                    <color key="baseForegroundColor" systemColor="labelColor"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="cancelButton:" destination="XOH-Mc-HSh" eventType="touchUpInside" id="izw-8z-HK7"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCe-Ye-hbw">
-                                <rect key="frame" x="256" y="807" width="138" height="55"/>
+                                <rect key="frame" x="220" y="807" width="138" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Confirm">
@@ -135,7 +123,7 @@
                                     <color key="baseForegroundColor" systemColor="labelColor"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="confirmButton:" destination="XOH-Mc-HSh" eventType="touchUpInside" id="wk3-oY-QPD"/>
+                                    <action selector="confirmButton:" destination="XOH-Mc-HSh" eventType="touchUpInside" id="uwD-IQ-3FL"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OpL-RC-pWC">
@@ -256,6 +244,18 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5K-0C-Yr6">
+                                <rect key="frame" x="36" y="807" width="138" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Cancel">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="24"/>
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="cancelButton:" destination="XOH-Mc-HSh" eventType="touchUpInside" id="03A-wh-TjS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2v4-jJ-6TI"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -263,12 +263,23 @@
                     <navigationItem key="navigationItem" id="pIo-tT-3FQ"/>
                     <connections>
                         <outlet property="actorLabel" destination="yeS-Dh-bKW" id="aMa-2F-ppi"/>
+                        <outlet property="actorLabelDesc" destination="lFv-4n-iW2" id="0IL-kt-93U"/>
                         <outlet property="aliasLabel" destination="Vn3-ye-ngI" id="MiT-OG-IeO"/>
+                        <outlet property="aliasLabelDesc" destination="ODK-E1-hPZ" id="eXD-eY-phG"/>
+                        <outlet property="cancelButtonStyle" destination="s5K-0C-Yr6" id="ZLI-pB-SCC"/>
+                        <outlet property="confirmButtonStyle" destination="JCe-Ye-hbw" id="6l5-DS-dTA"/>
+                        <outlet property="imageLabelDesc" destination="JGM-mm-TE2" id="BNP-gC-jPR"/>
                         <outlet property="imageName" destination="lFZ-u8-GdN" id="qI3-nw-WxK"/>
                         <outlet property="nameLabel" destination="srI-UJ-ljB" id="sLe-wS-S0N"/>
+                        <outlet property="nameLabelDesc" destination="GYc-Tz-h7N" id="pjM-3M-qM5"/>
                         <outlet property="quoteLabel" destination="vq0-fE-tF2" id="HXZ-4A-92q"/>
+                        <outlet property="quoteLabelDesc" destination="ESl-DM-MD3" id="FDe-iL-8g7"/>
                         <outlet property="roleLabel" destination="u9g-bw-uUg" id="EKk-9k-SsU"/>
+                        <outlet property="roleLabelDesc" destination="FEt-Ns-qbq" id="FXR-JF-Hhu"/>
+                        <outlet property="uiViewLayout" destination="OpL-RC-pWC" id="kME-sH-TA6"/>
+                        <outlet property="uploadImageStyle" destination="DqY-Rr-2F5" id="8cG-ZQ-4x6"/>
                         <outlet property="urlLabel" destination="UfP-TV-LeY" id="mR6-f1-cBW"/>
+                        <outlet property="urlLabelDesc" destination="aSm-e1-UJJ" id="4i1-OG-Hgo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OJ3-Bg-pvO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

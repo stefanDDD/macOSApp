@@ -55,14 +55,48 @@ class XMLCharactersParser: NSObject, XMLParserDelegate{
         
     }
     
-    func parsing(){
-        let bundleUrl = Bundle.main.bundleURL
-        let fileUrl = URL(string: self.name, relativeTo: bundleUrl)
-        parser = XMLParser(contentsOf: fileUrl!)
-        
+
+    func parsing(fromDocuments: Bool = false) {
+        let fileManager = FileManager.default
+
+        if fromDocuments {
+            if let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+                let documentFile = documentsUrl.appendingPathComponent(name)
+                
+                if fileManager.fileExists(atPath: documentFile.path) {
+                    parser = XMLParser(contentsOf: documentFile)
+                } else {
+                    return
+                }
+            }
+        } else {
+            if let bundleFile = Bundle.main.url(forResource: name, withExtension: nil) {
+                parser = XMLParser(contentsOf: bundleFile)
+            } else {
+                return
+            }
+        }
+
         parser.delegate = self
         parser.parse()
-        
     }
+
+    
+    func copyXMLToDocumentsIfNeeded() {
+        let fileManager = FileManager.default
+
+        if let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
+           let bundleFile = Bundle.main.url(forResource: name, withExtension: nil) {
+            let documentFile = documentsUrl.appendingPathComponent(name)
+            if !fileManager.fileExists(atPath: documentFile.path) {
+                do {
+                    try fileManager.copyItem(at: bundleFile, to: documentFile)
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
 
 }

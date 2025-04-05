@@ -14,9 +14,11 @@ class CharactersTableViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        charactersData = Characters(name: "characters_list.xml").charactersData
-        
+        let parserBundle = XMLCharactersParser(name: "characters_list.xml")
+        parserBundle.parsing()
+        let parserDocuments = XMLCharactersParser(name: "characters_list.xml")
+        parserDocuments.parsing(fromDocuments: true)
+        charactersData = parserBundle.charactersData + parserDocuments.charactersData
         let backgroundImage = UIImage(named: "bb_background.jpeg")
         let imageViewbg = UIImageView(image: backgroundImage)
         imageViewbg.frame = self.view.bounds
