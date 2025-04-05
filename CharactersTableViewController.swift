@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class CharactersTableViewController: UITableViewController{
+class CharactersTableViewController: UITableViewController {
     var charactersData: [Character]!
     var characterData: Character!
     
@@ -27,7 +27,6 @@ class CharactersTableViewController: UITableViewController{
         tableView.backgroundView = imageViewbg
         styleBreakingBadTableView()
     }
-
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -40,8 +39,7 @@ class CharactersTableViewController: UITableViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let characterData = self.charactersData[indexPath.row]
-        
-        if let image = UIImage(named: characterData.image) {
+        if let image = loadImage(named: characterData.image) {
             cell.imageView?.image = image
         }
         
@@ -87,5 +85,21 @@ class CharactersTableViewController: UITableViewController{
         tableView.cellLayoutMarginsFollowReadableWidth = false
     }
     
+    func loadImage(named imageName: String) -> UIImage? {
+        if let image = UIImage(named: imageName) {
+            return image
+        }
+        
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        
+        let imageURL = documentsDirectory.appendingPathComponent(imageName)
+        if let image = UIImage(contentsOfFile: imageURL.path) {
+            return image
+        }
+        
+        return nil
+    }
 }
-
